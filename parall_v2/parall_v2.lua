@@ -12,8 +12,6 @@ local obex_data = obex_fetch and obex_fetch() or {username = 'Puwpl', build = 'd
 local tab,place =  "AA","Anti-aimbot angles"
 local ffi = require 'ffi'
 
-print("HUI SMB")
-
 local what_noti_image = nil
 
 http.get("https://i.imgur.com/8AeuI7l.png", function(s, r)
