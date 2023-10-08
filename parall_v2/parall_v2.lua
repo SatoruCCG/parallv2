@@ -675,19 +675,6 @@ ui.set_callback(new_menu_references["visuals"].logs, function()
 end)
 
 local function thirdpersonValues()
-    if ui.get(new_menu_references["visuals"].collisionControl) == true then
-        cvar.c_mindistance:set_int(ui.get(new_menu_references["visuals"].distanceControl))
-        cvar.c_maxdistance:set_int(ui.get(new_menu_references["visuals"].distanceControl))
-    else
-        cvar.c_mindistance:set_int(100)
-        cvar.c_maxdistance:set_int(100)
-    end
-end
-
-ui.set_callback(new_menu_references["visuals"].collisionControl, thirdpersonValues)
-ui.set_callback(new_menu_references["visuals"].distanceControl, thirdpersonValues)
-thirdpersonValues()
-
     if table_contains(ui.get(new_menu_references["visuals"].extra_visuals),"edge yaw") then
         if ui.get(new_menu_references["keys"].edgeYawHotkey) then
             if not entity.is_alive(vars.localPlayer) then return end
@@ -701,6 +688,19 @@ thirdpersonValues()
             renderer.indicator(181, 179, 179, 255, "DE")
         end
     end
+
+    if ui.get(new_menu_references["visuals"].collisionControl) == true then
+        cvar.c_mindistance:set_int(ui.get(new_menu_references["visuals"].distanceControl))
+        cvar.c_maxdistance:set_int(ui.get(new_menu_references["visuals"].distanceControl))
+    else
+        cvar.c_mindistance:set_int(100)
+        cvar.c_maxdistance:set_int(100)
+    end
+end
+
+ui.set_callback(new_menu_references["visuals"].collisionControl, thirdpersonValues)
+ui.set_callback(new_menu_references["visuals"].distanceControl, thirdpersonValues)
+thirdpersonValues()
 
 local function paint(c)
 end
