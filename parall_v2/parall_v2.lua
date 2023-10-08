@@ -8,20 +8,9 @@ local trace = require "gamesense/trace" or error("Failed to load trace")
 local http = require "gamesense/http" or error("Failed to load http | https://gamesense.pub/forums/viewtopic.php?id=19253")
 local images = require("gamesense/images") or error("Failed to load images | https://gamesense.pub/forums/viewtopic.php?id=22917")
 local vector = require "vector"
-local obex_data = obex_fetch and obex_fetch() or {username = 'Puwpl', build = 'dev', discord=''}
+local obex_data = obex_fetch and obex_fetch() or {username = 'user', build = 'alpha', discord=''}
 local tab,place =  "AA","Anti-aimbot angles"
 local ffi = require 'ffi'
-
-local what_noti_image = nil
-
-http.get("https://i.imgur.com/8AeuI7l.png", function(s, r)
-    if s and r.status == 200 then
-        what_noti_image = images.load(r.body)
-    else
-        error("error getting image - error  " .. response.status_message)
-    end
-end)
-
 
 function rounded_rectangle(x, y, w, h, r, g, b, a, radius, thickness)
     y = y + radius
@@ -165,7 +154,7 @@ local new_menu_references = {
         aa_state_menu = ui.new_combobox(tab,place,"\aaac8fbffanti-aim\affffffff state",{"Stand","Walk","In-Air","Air duck","Duck","Slow","Manual","Fakelag","Legit"}),
         freestanding_disabler = ui.new_multiselect(tab, place, "Freestanding [\aaac8fbffdisablers\affffffff]",{"Stand","Walk","In-Air","Air duck","Duck","Slow","Fakelag"}),
         aa_state = {},
-        anti_kniv = ui.new_checkbox(tab, place, "Anti-knife"),
+        anti_kniv = ui.new_checkbox(tab, place, "anti-knife"),
         safe_dangerous = ui.new_checkbox(tab, place, "safe knife | taser"),
         label_jitter_ways = ui.new_label(tab,place,"Only works if you enable jitter ways"),
         
@@ -173,10 +162,9 @@ local new_menu_references = {
 
     ["visuals"] = {
         
-        enable_indicators = ui.new_combobox(tab,place,"Indicators",{"off","default","minimal","yeat"}),
-        indicator_color = ui.new_color_picker(tab, place, "indicatorz", 101, 130, 190, 255),
-        --scoped_animation = ui.new_checkbox(tab, place, "Scoped animation"),
-        enable_manual = ui.new_combobox(tab, place, "Manual arrows",{"off","ts","minimal"}),
+        enable_indicators = ui.new_combobox(tab,place,"> indicators",{"-","default","minimal"}),
+        indicator_color = ui.new_color_picker(tab, place, "indicatorz", 255, 255, 255, 255),
+        enable_manual = ui.new_combobox(tab, place, "> manual arrows",{"-","teamskeet","minimal"}),
         indicator_manual_color = ui.new_color_picker(tab, place, "indicatorzmanual", 255, 255, 255, 255),
         enable_velocity_adaptive = ui.new_checkbox(tab, place, "velocity adaptive"),
         enable_defensive_indicator = ui.new_checkbox(tab, place, "defensive indicator"),
@@ -186,56 +174,39 @@ local new_menu_references = {
         enable_min_dmg_ovrrd = ui.new_checkbox(tab, place, "minimum damage indicator"),
         enable_desync_indicator = ui.new_checkbox(tab, place, "desync indicator"),
         indicator_desync_color = ui.new_color_picker(tab, place, "indicatorzdesync", 255, 255, 255, 255),
-        draw_logs = ui.new_checkbox(tab, place, "console logs"),
-        zeus = ui.new_multiselect(tab, place, "> zeus indicator",{"Zeus warning"}),
-        --zeus_warning = ui.new_checkbox(tab, place, "Zeus warning"),
-        extra_visuals = ui.new_multiselect(tab, place, "> extras",{"beta logs", "at target flag", "edge yaw", "discharge exploit"}),
-        --noti_timer = ui.new_slider(tab,place,"notifcation timer", 1, 10, 5,1,"s"),
-        --noti_padding = ui.new_slider(tab,place,"notifcation padding", 0, 50, 10,1,"px"),
-        --aim_logs_label = ui.new_label(tab,place,"aim logs outline"),
-        --aim_logs_outline_color = ui.new_color_picker(tab,place,"aim logs outlinez",101,130,190,255),
+
+        console_col_label = ui.new_checkbox(tab, place, 'console color'),
+        recolor_console = ui.new_color_picker(tab, place, 'console_color_smb', 81, 81, 81, 210),
         watermark_label = ui.new_checkbox(tab,place,"watermark"),
         watermark_color = ui.new_color_picker(tab,place,"water_colorz",101,130,190,255),
 
-        collisionControl = ui.new_checkbox(tab, place, "Thirdperson"),
-        distanceControl = ui.new_slider(tab, place, "Thirdperson distance", 30, 200, 125),
+        collisionControl = ui.new_checkbox(tab, place, "thirdperson"),
+        distanceControl = ui.new_slider(tab, place, "thirdperson distance", 30, 200, 100),
 
-        --hitmarker = ui.new_checkbox(tab, place, "Hitmarker"),
-        hitmarker = ui.new_combobox(tab, place, "Hitmarker",{"Off", "Default", "Default + circle"}),
-        hitmarker_color = ui.new_color_picker(tab, place, "hitmarker_color_smb", 255, 255, 255, 255),
+        logs = ui.new_checkbox(tab, place, "screen log"),
+        logsClr = ui.new_color_picker(tab, place, "logs Color", lua_color.r, lua_color.g, lua_color.b, 255),
+        logOffset = ui.new_slider(tab, place, "offset", 0, 500, 0, true, "px", 1),
 
-        console_col_label = ui.new_checkbox(tab, place, 'Console color'),
-        recolor_console = ui.new_color_picker(tab, place, 'console_color_smb', 81, 81, 81, 210),
-
-        tracer = ui.new_combobox(tab,place,"Bullet tracers",{"off","default","glow"}),
-        color = ui.new_color_picker(tab, place, "tracer_color", 255, 255, 255, 255),
-        logs = ui.new_checkbox(tab, place, "On Screen Logs"),
-        logsClr = ui.new_color_picker(tab, place, "Logs Color", lua_color.r, lua_color.g, lua_color.b, 255),
-        logOffset = ui.new_slider(tab, place, "Offset", 0, 500, 100, true, "px", 1),
-        --aimer_legs = ui.new_checkbox(tab, place, "aimer_lugs"),
-        --whatsappi = ui.new_checkbox(tab, place, "whatsappi"),
+        zeus = ui.new_multiselect(tab, place, "> zeus indicator",{"zeus warning"}),
+        extra_visuals = ui.new_multiselect(tab, place, "> extras",{"beta logs", "at target flag", "edge yaw", "discharge exploit"}),
     },
 
     ["misc"] = {
         
         enable_clan_tag = ui.new_checkbox(tab, place, "synced tag"),
-        enable_kill_say = ui.new_combobox(tab, place, "kill say",{"Disabled","Starlight","Yeat"}),
-        enable_sun_rise = ui.new_checkbox(tab, place, "sun rise mode"),
+        console_filter = ui.new_checkbox(tab, place, "console filter"),
+        enable_sun_rise = ui.new_checkbox(tab, place, "shadow modulation"),
         sun_pitch = ui.new_slider(tab, place, "Pitch\n", -89, 89, 0),
         sun_yaw = ui.new_slider(tab, place, "Yaw\n", 0, 180, 0),
         sun_distance = ui.new_slider(tab, place, "Distance\n", 50, 1500, 0),
-        --sun_label = ui.new_label(tab,place,"Sun color"),
-        --sun_color = ui.new_slider(tab, place, "Sun color hui", 0, 255, 0, false),
-        enable_nigthermode = ui.new_checkbox(tab, place, "nightmode v2"),
         debug_ragebot = ui.new_multiselect(tab, place, "[\aaac8fbffdebug\affffffff] ragebot enhancer",{"defensive aa resolver (exprimental)","safe point enhancer"}),
         safe_point = ui.new_multiselect(tab, place, "safe point enhancer",{"Stand","on lethal","default","wide jitter"}),
-        m_elements = ui.new_multiselect(tab, place, "Animbreakes", {"Adjust body lean", "Slide slow-walking", "Reset pitch on land", "Break legs while in air", "Break legs while landing"}),
-        slide_elements = ui.new_multiselect(tab, place, "Sliding elements", {"While walking", "While running", "While crouching"}),
-        body_lean_value = ui.new_slider(tab, place, "Body lean value", 0, 100, 0, true, "%", 0.01, {[0] = "Disabled", [35] = "Small", [50] = "Medium", [75] = "High", [100] = "Extreme"}),
-        break_air_value = ui.new_slider(tab, place, "Breakable air value", 0, 10, 5, true, "%", 0.1, {[0] = "Disabled", [5] = "Default", [10] = "Maximum"}),
-        break_land_value = ui.new_slider(tab, place, "Breakable land value", 0, 10, 5, true, "%", 0.1, {[0] = "Slowest", [5] = "Fastest", [10] = "Disabled"}),
-        console_filter = ui.new_checkbox(tab, place, "Console filter"),
-        --dtDischarge = ui.new_checkbox(tab, place, "Discharge Exploit"),
+        enable_kill_say = ui.new_combobox(tab, place, "killsay",{"-","starlight"}),
+        m_elements = ui.new_multiselect(tab, place, "animbreakes", {"body lean", "sliding", "pitch zero on land", "legbreaker in air", "legbreaker on land"}),
+        slide_elements = ui.new_multiselect(tab, place, "sliding elements", {"walking", "running", "crouching"}),
+        body_lean_value = ui.new_slider(tab, place, "body lean value", 0, 100, 0, true, "%", 0.01, {[0] = "off", [35] = "small", [50] = "medium", [75] = "high", [100] = "extreme"}),
+        break_air_value = ui.new_slider(tab, place, "breakable air value", 0, 10, 0, true, "%", 0.1, {[0] = "off", [10] = "maximum"}),
+        break_land_value = ui.new_slider(tab, place, "breakable land value", 0, 10, 0, true, "%", 0.1, {[0] = "slow", [5] = "fastest", [10] = "off"}),
     },
 
     ["keys"] = {
@@ -717,34 +688,6 @@ ui.set_callback(new_menu_references["visuals"].collisionControl, thirdpersonValu
 ui.set_callback(new_menu_references["visuals"].distanceControl, thirdpersonValues)
 thirdpersonValues()
 
-local queue = {}
-
-local queue1 = {}
-
-local function aim_fire(c)
-	queue[globals.tickcount()] = {c.x,c.y,c.z, globals.curtime() + 2}
-end
-
-local function glow_line(x, y, x2, y2, r, g, b, a)
-    for i = 1, 5 do
-        renderer.line(x - (5 - i), y - (5 - i), x2 - (5 - i), y2 - (5 - i), r, g, b, i * 20)
-        --renderer.line(x + (5 - i), y + (5 - i), x2 + (5 - i), y2 + (5 - i), r, g, b, i * 60)
-    end
-end
-
-client.set_event_callback("bullet_impact", function(e)
-    if ui.get(new_menu_references["visuals"].tracer) == "off" then
-        return
-    end
-    if client.userid_to_entindex(e.userid) ~= entity.get_local_player() then
-        return
-    end
-    local lx, ly, lz = client.eye_position()
-    queue1[globals.tickcount()] = {lx, ly, lz, e.x, e.y, e.z, globals.curtime() + 2}
-end)
-
-client.set_event_callback("paint", function()
-
     if table_contains(ui.get(new_menu_references["visuals"].extra_visuals),"edge yaw") then
         if ui.get(new_menu_references["keys"].edgeYawHotkey) then
             if not entity.is_alive(vars.localPlayer) then return end
@@ -759,70 +702,8 @@ client.set_event_callback("paint", function()
         end
     end
 
-    if ui.get(new_menu_references["visuals"].tracer) == "off" then
-        return
-    end
-    local tracer_col = { ui.get(new_menu_references["visuals"].color) }
-    for tick, data in pairs(queue1) do
-        if globals.curtime() <= data[7] then
-            local x1, y1 = renderer.world_to_screen(data[1], data[2], data[3])
-            local x2, y2 = renderer.world_to_screen(data[4], data[5], data[6])
-            if x1 ~= nil and x2 ~= nil and y1 ~= nil and y2 ~= nil then
-                if ui.get(new_menu_references["visuals"].tracer) == "default" then
-                    renderer.line(x1, y1, x2, y2, ui.get(new_menu_references["visuals"].color))
-                elseif ui.get(new_menu_references["visuals"].tracer) == "glow" then
-                    glow_line(x1, y1, x2, y2, tracer_col[1], tracer_col[2], tracer_col[3], tracer_col[4])
-                end
-            end
-        end
-    end
-end)
-
-client.set_event_callback("round_start", function()
-    if ui.get(new_menu_references["visuals"].tracer) == "off" then
-        return
-    end
-    queue1 = {}
-end)
-
-client.set_event_callback("round_prestart", function()
-    if ui.get(new_menu_references["visuals"].tracer) == "off" then
-        return
-    end
-    queue = {}
-end)
-
 local function paint(c)
-    local hitmarker_color = { ui.get(new_menu_references["visuals"].hitmarker_color) }
-
-    if ui.get(new_menu_references["visuals"].hitmarker) == "Default" then
-        for tick, data in pairs(queue) do
-            if globals.curtime() <= data[4] then
-                local x1, y1 = renderer.world_to_screen(data[1], data[2], data[3])
-                if x1 ~= nil and y1 ~= nil then
-                --renderer.circle_outline(x1,y1,255,255,255,255,5,0,1.0,1)
-                
-                renderer.line(x1 - 6,y1,x1 + 6,y1,0, hitmarker_color[1],hitmarker_color[2],hitmarker_color[3], hitmarker_color[4])
-                renderer.line(x1,y1 - 6,x1,y1 + 6, hitmarker_color[1],hitmarker_color[2],hitmarker_color[3], hitmarker_color[4])
-                end
-            end
-        end
-    end
-    if ui.get(new_menu_references["visuals"].hitmarker) == "Default + circle" then
-        for tick, data in pairs(queue) do
-            if globals.curtime() <= data[4] then
-                local x1, y1 = renderer.world_to_screen(data[1], data[2], data[3])
-                if x1 ~= nil and y1 ~= nil then
-                renderer.circle_outline(x1,y1,255,255,255,255,5,0,1.0,1)
-                
-                renderer.line(x1 - 6,y1,x1 + 6,y1,0, hitmarker_color[1],hitmarker_color[2],hitmarker_color[3], hitmarker_color[4])
-                renderer.line(x1,y1 - 6,x1,y1 + 6, hitmarker_color[1],hitmarker_color[2],hitmarker_color[3], hitmarker_color[4])
-                end
-            end
-        end
-    end
 end
-
 local materials = { 'vgui_white', 'vgui/hud/800corner1', 'vgui/hud/800corner2', 'vgui/hud/800corner3', 'vgui/hud/800corner4' }
 
 client.set_event_callback('paint', function()
@@ -845,7 +726,7 @@ client.set_event_callback('paint', function()
     end
 end)
 
-client.set_event_callback("aim_fire",aim_fire)
+
 client.set_event_callback("paint",paint)
 
 client.set_event_callback("round_prestart", function()
@@ -876,8 +757,8 @@ client.set_event_callback("setup_command", function(cmd)
 
     vars.localPlayer = entity.get_local_player()
 
-    if table.contains(new_menu_references["misc"].m_elements, "Break legs while landing") then
-        ui.set(menu_reference.slidewalk_directory, cmd.command_number % 3 == 0 and "Off" or "Always slide")
+    if table.contains(new_menu_references["misc"].m_elements, "legbreaker on land") then
+        ui.set(menu_reference.slidewalk_directory, cmd.command_number % 3 == 0 and "Off" or "Always slide" or "Never slide")
     end
 
     if ui.get(new_menu_references["keys"].dtDischarge) then
@@ -965,29 +846,29 @@ client.set_event_callback("pre_render", function()
         return
     end
 
-    if table.contains(new_menu_references["misc"].m_elements, "Slide slow-walking") then
-        if table.contains(new_menu_references["misc"].slide_elements, "While walking") then
+    if table.contains(new_menu_references["misc"].m_elements, "sliding") then
+        if table.contains(new_menu_references["misc"].slide_elements, "walking") then
             entity.set_prop(self, "m_flPoseParameter", 0, E_POSE_PARAMETERS.MOVE_BLEND_WALK)
         end
 
-        if table.contains(new_menu_references["misc"].slide_elements, "While running") then
+        if table.contains(new_menu_references["misc"].slide_elements, "running") then
             entity.set_prop(self, "m_flPoseParameter", 0, E_POSE_PARAMETERS.MOVE_BLEND_RUN)
         end
 
-        if table.contains(new_menu_references["misc"].slide_elements, "While crouching") then
+        if table.contains(new_menu_references["misc"].slide_elements, "crouching") then
             entity.set_prop(self, "m_flPoseParameter", 0, E_POSE_PARAMETERS.MOVE_BLEND_CROUCH)
         end
     end
 
-    if table.contains(new_menu_references["misc"].m_elements, "Break legs while in air") then
+    if table.contains(new_menu_references["misc"].m_elements, "legbreaker in air") then
         entity.set_prop(self, "m_flPoseParameter", ui.get(new_menu_references["misc"].break_air_value) / 10, E_POSE_PARAMETERS.JUMP_FALL)
     end
 
-    if table.contains(new_menu_references["misc"].m_elements, "Break legs while landing") then
+    if table.contains(new_menu_references["misc"].m_elements, "legbreaker on land") then
         entity.set_prop(self, "m_flPoseParameter", E_POSE_PARAMETERS.STAND, globals.tickcount() % 4 > 1 and ui.get(new_menu_references["misc"].break_land_value) / 10 or 1)
     end
     
-    if table.contains(new_menu_references["misc"].m_elements, "Adjust body lean") then
+    if table.contains(new_menu_references["misc"].m_elements, "body lean") then
         local self_anim_overlay = self_index:get_anim_overlay(12)
         if not self_anim_overlay then
             return
@@ -999,7 +880,7 @@ client.set_event_callback("pre_render", function()
         end
     end
 
-    if table.contains(new_menu_references["misc"].m_elements, "Reset pitch on land") then
+    if table.contains(new_menu_references["misc"].m_elements, "pitch zero on land") then
         if not self_anim_state.hit_in_ground_animation or not is_on_ground then
             return
         end
@@ -1677,9 +1558,9 @@ function aa_functions:defensive_setup(cmd)
         aa_functions.to_start = true
     end
     
-    if aa_functions.to_start == true and aa_functions.actual_tick < 100 then
+    if aa_functions.to_start == true and aa_functions.actual_tick < 75 then
         aa_functions.actual_tick = aa_functions.actual_tick + 1
-    elseif aa_functions.actual_tick >= 100 then
+    elseif aa_functions.actual_tick >= 75 then
         aa_functions.actual_tick = 0
         aa_functions.to_start = false
     end
@@ -2062,104 +1943,6 @@ function visual_functions:indicators2()
 end
 
 
-function visual_functions:indicators3()
-
-    visual_functions.indicator_bottom = 0
-    local w,h = client.screen_size()
-    local indicator_color = { ui.get(new_menu_references["visuals"].indicator_color) }
-
-    renderer.text(w / 2 + visual_functions.offset,h / 2 + 25,indicator_color[1],indicator_color[2],indicator_color[3],indicator_color[4],"c-",0,string.format("LUH\a96C83C%02XGËEK",indicator_color[4],indicator_color[4]))
-    
-    if ui.get(menu_reference.dt[1]) and ui.get(menu_reference.dt[2]) then
-        visual_functions.indicator_bottom = visual_functions.indicator_bottom + 10
-        visual_functions.dt_indicator_animation = lerp(visual_functions.dt_indicator_animation,visual_functions.indicator_bottom,globals.frametime() * 15)
-        renderer.text(w / 2 + visual_functions.offset,h / 2 + 25 + visual_functions.dt_indicator_animation,255,255,255,anti_aim_funcs.get_double_tap() and 255 or 50, "c-", 0,"DOUBLË")
-        
-    end
-
-    if ui.get(menu_reference.os[1]) and ui.get(menu_reference.os[2]) then
-        visual_functions.indicator_bottom = visual_functions.indicator_bottom + 10
-        visual_functions.hs_indicator_animation = lerp(visual_functions.hs_indicator_animation,visual_functions.indicator_bottom,globals.frametime() * 15)
-
-        renderer.text(w / 2 + visual_functions.offset,h / 2 + 25 + visual_functions.hs_indicator_animation, 255,255,255,not ui.get(menu_reference.dt[2]) and 255 or 50, "c-", 0, "SHHHH")
-        
-        
-    end
-    
-    bottom = lerp(bottom,visual_functions.indicator_bottom + 10,globals.frametime() * 15)
-    renderer.text(w / 2 + visual_functions.offset ,h / 2 + 25 + bottom,255,255,255,ui.get(menu_reference.freestand[1]) and 255 or 50,"c-",0,"FS")
-    renderer.text(w / 2 - 15 + visual_functions.offset,h / 2 + 25 + bottom,255,255,255,ui.get(menu_reference.forcebaim) and 255 or 50,"c-",0,"BAIM")
-    renderer.text(w / 2 + 18 +  visual_functions.offset,h / 2 + 25 + bottom,255,255,255,ui.get(menu_reference.quickpeek[2]) and ui.get(menu_reference.quickpeek[1]) and 255 or 50,"c-",0,"QUICK")
-
-
-    if not ui.get(menu_reference.dt[2]) then
-        visual_functions.dt_indicator_animation = 0
-    end
-
-    if not ui.get(menu_reference.os[2]) then
-        visual_functions.hs_indicator_animation = 0
-    end
-end
-
-local DT_Color = {}
-function visual_functions:green_dt_skeet_beta()
-
-  
-    if ui.get(menu_reference.dt[1]) and ui.get(menu_reference.dt[2]) then
-    
-       
-    
-        if visual_functions.ticks <= -1 then
-            visual_functions.is_defensive_state = true
-        end
-
-
-        if visual_functions.is_in_attack or visual_functions.in_fire then
-            visual_functions.is_defensive_state = false
-            visual_functions.is_defensive_ticks = 0
-            visual_functions.is_defensive_disable = false
-        end
-
-
-        if visual_functions.is_defensive_state == true then
-            
-            if  visual_functions.is_defensive_ticks < 100 then
-                visual_functions.is_defensive_ticks =  visual_functions.is_defensive_ticks + 1
-            elseif  visual_functions.is_defensive_ticks >= 100 then
-                visual_functions.is_defensive_state = false
-                visual_functions.is_defensive_ticks = 0
-            end
-        else
-            visual_functions.is_defensive_ticks = 0
-        end
-
-        if ui.get(menu_reference.fakeduck) then
-            visual_functions.is_defensive_disable = false
-        end
-
-        if visual_functions.is_defensive_state == true then
-            DT_Color = {143,194,21,255}
-            visual_functions.is_defensive_disable = true
-        elseif not anti_aim_funcs.get_double_tap() then
-
-            DT_Color = {255,0,50,255}
-            if visual_functions.ticks >= 0 and visual_functions.is_defensive_disable == true then
-                DT_Color = {205,205,205,255}
-            end
-
-        elseif anti_aim_funcs.get_double_tap() then
-            DT_Color = {205,205,205,255}
-            visual_functions.is_defensive_disable = true
-        end
-
-    
-
-       renderer.indicator(DT_Color[1], DT_Color[2], DT_Color[3], DT_Color[4], "DT")
-
-       visual_functions.in_fire = false
-    end
-
-end
 
 function visual_functions:manual_indicator()
 
@@ -2174,7 +1957,7 @@ function visual_functions:manual_indicator()
         aa.color_right = {ui.get(new_menu_references["visuals"].indicator_manual_color)}
     end
 
-    if ui.get(new_menu_references["visuals"].enable_manual) == "ts" then
+    if ui.get(new_menu_references["visuals"].enable_manual) == "teamskeet" then
 
 
         aa.color_body_l = {12,12,12,130}
@@ -2237,8 +2020,7 @@ function visual_functions:desync_indicator()
     if ui.get(new_menu_references["visuals"].enable_desync_indicator) then
 
         local scoped = entity.get_prop(entity.get_local_player(),"m_bIsScoped") == 1 and true or false
-       --local scoped_and_box = ui.get(new_menu_references["visuals"].scoped_animation) and scoped
-       --visual_functions.offset2 = lerp(visual_functions.offset2,scoped_and_box and 17 or 0,globals.frametime() * 15)
+       visual_functions.offset2 = lerp(visual_functions.offset2,scoped_and_box and 17 or 0,globals.frametime() * 15)
 
         local w,h = client.screen_size()
         local desync_color = {ui.get(new_menu_references["visuals"].indicator_desync_color)}
@@ -2251,9 +2033,9 @@ function visual_functions:desync_indicator()
 
         local desync_bar = desync * 26 / 60
     
-        --local indicator_set = ui.get(new_menu_references["visuals"].enable_indicators) == "default" and visual_functions.offset or visual_functions.offset2
-        --renderer.rectangle(w / 2 - 14 + indicator_set , h / 2 + 13,29,4,0,0,0,255)
-        --renderer.gradient(w / 2 - 13 + indicator_set, h / 2 + 14,desync_bar,2,desync_color[1],desync_color[2],desync_color[3],desync_color[4],  desync_color[1],desync_color[2],desync_color[3],0,true)
+        local indicator_set = ui.get(new_menu_references["visuals"].enable_indicators) == "default" and visual_functions.offset or visual_functions.offset2
+        renderer.rectangle(w / 2 - 14 + indicator_set , h / 2 + 13,29,4,0,0,0,255)
+        renderer.gradient(w / 2 - 13 + indicator_set, h / 2 + 14,desync_bar,2,desync_color[1],desync_color[2],desync_color[3],desync_color[4],  desync_color[1],desync_color[2],desync_color[3],0,true)
     end 
 end
 
@@ -2347,11 +2129,9 @@ function misc_functions:sunset()
         old_dist = vector(entity.get_prop(sun_prop, "m_flMaxShadowDist"))
         entity.set_prop(sun_prop,"m_envLightShadowDirection",ui.get(new_menu_references["misc"].sun_pitch),ui.get(new_menu_references["misc"].sun_yaw),0)
         entity.set_prop(sun_prop,"m_flMaxShadowDist", ui.get(new_menu_references["misc"].sun_distance))
-        --entity.set_prop(sun_prop, "m_LightColor", new_menu_references["misc"].sun_color)
     elseif not ui.get(new_menu_references["misc"].enable_sun_rise) then
             entity.set_prop(sun_prop,"m_envLightShadowDirection",old_sun.x,old_sun.y,old_sun.z)
             entity.set_prop(sun_prop,"m_flMaxShadowDist", old_dist)
-            --entity.set_prop(sun_prop, "m_LightColor", old_color)
     end
 end
 
@@ -2425,21 +2205,8 @@ function visual_functions:zeus_indicator()
 end
 
 
-local overwritten = false
 local function entity_override()
-    local ent_map = entity.get_all("CEnvTonemapController")[1]
-
-    if ui.get(new_menu_references["misc"].enable_nigthermode) and overwritten == false then
-        entity.set_prop(ent_map, "m_bUseCustomAutoExposureMin", 1)
-        entity.set_prop(ent_map, "m_bUseCustomAutoExposureMax",1)
-        entity.set_prop(ent_map, "m_flCustomAutoExposureMin", 0.1)
-        entity.set_prop(ent_map, "m_flCustomAutoExposureMax", 0.1)
-        overwritten = true
-    elseif not ui.get(new_menu_references["misc"].enable_nigthermode) and overwritten then
-        entity.set_prop(ent_map, "m_bUseCustomAutoExposureMin", 0)
-        entity.set_prop(ent_map, "m_bUseCustomAutoExposureMax",0)
-        overwritten = false
-    end
+local ent_map = entity.get_all("CEnvTonemapController")[1]
 end
 
 
@@ -2549,16 +2316,14 @@ new_menu_references.config.export_file = ui.new_button(tab,place, "export to cli
     .. tostring(ui.get(new_menu_references["visuals"].enable_min_dmg_ovrrd)) .. "|"
     .. tostring(ui.get(new_menu_references["visuals"].enable_desync_indicator)) .. "|"
     .. tostring(ui.get(new_menu_references["visuals"].indicator_desync_color)) .. "|"
-    .. tostring(ui.get(new_menu_references["visuals"].draw_logs)) .. "|"
     .. tostring(ui.get(new_menu_references["visuals"].zeus)) .. "|"
     .. tostring(ui.get(new_menu_references["visuals"].extra_visuals)) .. "|"
     .. tostring(ui.get(new_menu_references["visuals"].watermark_label)) .. "|"
     .. tostring(ui.get(new_menu_references["visuals"].watermark_color)) .. "|"
 
-    .. tostring(ui.get(new_menu_references["misc"].enable_clan_tag)) .. "|"
     .. tostring(ui.get(new_menu_references["misc"].enable_kill_say)) .. "|"
+    .. tostring(ui.get(new_menu_references["misc"].enable_clan_tag)) .. "|"
     .. tostring(ui.get(new_menu_references["misc"].enable_sun_rise)) .. "|"
-    .. tostring(ui.get(new_menu_references["misc"].enable_nigthermode)) .. "|"
     .. tostring(ui.get(new_menu_references["misc"].debug_ragebot)) .. "|"
     .. tostring(ui.get(new_menu_references["misc"].safe_point)) .. "|"
     .. tostring(ui.get(new_menu_references["misc"].m_elements)) .. "|"
@@ -2647,8 +2412,6 @@ new_menu_references.config.import_config = ui.new_button(tab,place,"import from 
     crescente = crescente + 1
     ui.set(new_menu_references["visuals"].enable_desync_indicator, to_boolean(tbl[crescente]))
     crescente = crescente + 1
-    ui.set(new_menu_references["visuals"].draw_logs, to_boolean(tbl[crescente]))
-    crescente = crescente + 1
     --ui.set(new_menu_references["visuals"].zeus, tostring(tbl[crescente]))
     --crescente = crescente + 1
     --ui.set(new_menu_references["visuals"].extra_visuals, tostring(tbl[crescente]))
@@ -2660,8 +2423,6 @@ new_menu_references.config.import_config = ui.new_button(tab,place,"import from 
     ui.set(new_menu_references["misc"].enable_kill_say, to_boolean(tbl[crescente]))
     crescente = crescente + 1
     ui.set(new_menu_references["misc"].enable_sun_rise, to_boolean(tbl[crescente]))
-    crescente = crescente + 1
-    ui.set(new_menu_references["misc"].enable_nigthermode, to_boolean(tbl[crescente]))
     crescente = crescente + 1
     --ui.set(new_menu_references["misc"].debug_ragebot, tostring(tbl[crescente]))
     --crescente = crescente + 1
@@ -2757,12 +2518,7 @@ new_menu_references.config.default_config = ui.new_button(tab,place,"default con
     crescente = crescente + 1
     ui.set(new_menu_references["visuals"].enable_desync_indicator, to_boolean(tbl[crescente]))
     crescente = crescente + 1
-    --ui.set(new_menu_references["visuals"].draw_logs, to_boolean(tbl[crescente]))
     crescente = crescente + 1
-    --ui.set(new_menu_references["visuals"].zeus, tostring(tbl[crescente]))
-    --crescente = crescente + 1
-    --ui.set(new_menu_references["visuals"].extra_visuals, tostring(tbl[crescente]))
-    --crescente = crescente + 1
 
     --misc
     --ui.set(new_menu_references["misc"].enable_key, to_boolean(tbl[crescente]))
@@ -2770,8 +2526,6 @@ new_menu_references.config.default_config = ui.new_button(tab,place,"default con
     --ui.set(new_menu_references["misc"].enable_kill_say, to_boolean(tbl[crescente]))
     crescente = crescente + 1
     ui.set(new_menu_references["misc"].enable_sun_rise, to_boolean(tbl[crescente]))
-    crescente = crescente + 1
-    ui.set(new_menu_references["misc"].enable_nigthermode, to_boolean(tbl[crescente]))
     crescente = crescente + 1
     --ui.set(new_menu_references["misc"].debug_ragebot, tostring(tbl[crescente]))
     --crescente = crescente + 1
@@ -2785,7 +2539,6 @@ new_menu_references.config.default_config = ui.new_button(tab,place,"default con
     crescente = crescente + 1
     --ui.set(new_menu_references["misc"].break_air_value, tonumber(tbl[crescente]))
     crescente = crescente + 1
-    --ui.set(new_menu_references["misc"].break_land_value, tonumber(tbl[crescente]))
     crescente = crescente + 1
 
     --keys
@@ -2900,63 +2653,49 @@ local function new_menu_visibility()
     --ui.set_visible(new_menu_references["visuals"].visual_label,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].zeus,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].enable_indicators,ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].draw_logs,ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].indicator_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_indicators) ~= "off")
-    --ui.set_visible(new_menu_references["visuals"].scoped_animation,ui_menu.selected_tab == 3 )
-    ui.set_visible(new_menu_references["visuals"].indicator_manual_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_manual) ~= "off")
+    ui.set_visible(new_menu_references["visuals"].indicator_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_indicators) ~= "-")
+    ui.set_visible(new_menu_references["visuals"].indicator_manual_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_manual) ~= "-")
     ui.set_visible(new_menu_references["visuals"].enable_manual,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].enable_min_dmg_ovrrd,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].enable_desync_indicator,ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].enable_velocity_adaptive, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_manual) ~= "off")
+    ui.set_visible(new_menu_references["visuals"].enable_velocity_adaptive, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_manual) ~= "-")
     ui.set_visible(new_menu_references["visuals"].enable_defensive_indicator,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].slow_indicator,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].indicator_desync_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_desync_indicator))
     ui.set_visible(new_menu_references["visuals"].indicator_defensive_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].enable_defensive_indicator))
     ui.set_visible(new_menu_references["visuals"].indicator_slow_color,ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].slow_indicator))
-    --ui.set_visible(new_menu_references["visuals"].aim_logs_label, ui_menu.selected_tab == 3)
-    --ui.set_visible(new_menu_references["visuals"].aim_logs_outline_color, ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].watermark_color, ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].watermark_label, ui_menu.selected_tab == 3)
+    ui.set_visible(new_menu_references["visuals"].watermark_color, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].watermark_label)) 
     ui.set_visible(new_menu_references["visuals"].extra_visuals,ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].collisionControl, ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].distanceControl, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].collisionControl))
 
-    ui.set_visible(new_menu_references["visuals"].hitmarker, ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].hitmarker_color, ui_menu.selected_tab == 3)
     ui.set_visible(new_menu_references["visuals"].console_col_label, ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].recolor_console, ui_menu.selected_tab == 3)
+    ui.set_visible(new_menu_references["visuals"].recolor_console, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].console_col_label))
 
-    ui.set_visible(new_menu_references["visuals"].tracer, ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].color, ui_menu.selected_tab == 3)
 
     ui.set_visible(new_menu_references["visuals"].logs, ui_menu.selected_tab == 3)
-    ui.set_visible(new_menu_references["visuals"].logsClr, ui_menu.selected_tab == 3)
+    ui.set_visible(new_menu_references["visuals"].logsClr, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].logs))
     ui.set_visible(new_menu_references["visuals"].logOffset, ui_menu.selected_tab == 3 and ui.get(new_menu_references["visuals"].logs))
-
-    --ui.set_visible(new_menu_references["visuals"].noti_timer,ui_menu.selected_tab == 3)
-    --ui.set_visible(new_menu_references["visuals"].noti_padding,ui_menu.selected_tab == 3)
     
     --misc
     --ui.set_visible(new_menu_references["misc"].misc_label,ui_menu.selected_tab == 4)
-    ui.set_visible(new_menu_references["misc"].enable_clan_tag,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].enable_kill_say,ui_menu.selected_tab == 4)
+    ui.set_visible(new_menu_references["misc"].enable_clan_tag,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].enable_sun_rise,ui_menu.selected_tab == 4)
+    ui.set_visible(new_menu_references["misc"].console_filter, ui_menu.selected_tab == 4)
 
     ui.set_visible(new_menu_references["misc"].sun_pitch, ui_menu.selected_tab == 4 and ui.get(new_menu_references["misc"].enable_sun_rise))
     ui.set_visible(new_menu_references["misc"].sun_yaw, ui_menu.selected_tab == 4 and ui.get(new_menu_references["misc"].enable_sun_rise))
     ui.set_visible(new_menu_references["misc"].sun_distance, ui_menu.selected_tab == 4 and ui.get(new_menu_references["misc"].enable_sun_rise))
-    --ui.set_visible(new_menu_references["misc"].sun_label, ui_menu.selected_tab == 4 and ui.get(new_menu_references["misc"].enable_sun_rise))
-    --ui.set_visible(new_menu_references["misc"].sun_color, ui_menu.selected_tab == 4 and ui.get(new_menu_references["misc"].enable_sun_rise))
 
-    ui.set_visible(new_menu_references["misc"].enable_nigthermode,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].safe_point,ui_menu.selected_tab == 4 and table_contains(ui.get(new_menu_references["misc"].debug_ragebot),"safe point enhancer"))
     ui.set_visible(new_menu_references["misc"].debug_ragebot,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].m_elements, ui_menu.selected_tab == 4)
-    ui.set_visible(new_menu_references["misc"].slide_elements, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "Slide slow-walking"))
-    ui.set_visible(new_menu_references["misc"].body_lean_value, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "Adjust body lean"))
-    ui.set_visible(new_menu_references["misc"].break_air_value, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "Break legs while in air"))
-    ui.set_visible(new_menu_references["misc"].break_land_value, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "Break legs while landing"))
-    ui.set_visible(new_menu_references["misc"].console_filter, ui_menu.selected_tab == 4)
+    ui.set_visible(new_menu_references["misc"].slide_elements, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "sliding"))
+    ui.set_visible(new_menu_references["misc"].body_lean_value, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "body lean"))
+    ui.set_visible(new_menu_references["misc"].break_air_value, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "legbreaker in air"))
+    ui.set_visible(new_menu_references["misc"].break_land_value, ui_menu.selected_tab == 4 and table.contains(new_menu_references["misc"].m_elements, "legbreaker on land"))
 
     --config
     --ui.set_visible(new_menu_references.config.config_label,ui_menu.selected_tab == 5)
@@ -2983,7 +2722,7 @@ client.set_event_callback("player_death",function(ent)
         end
     end
 
-    if ui.get(new_menu_references["misc"].enable_kill_say) ~= "Disabled" and client.userid_to_entindex(ent.attacker) == entity.get_local_player() and entity.get_prop(client.userid_to_entindex(ent.userid),"m_iTeamNum") ~= entity.get_prop(entity.get_local_player(),"m_iTeamNum") then
+    if ui.get(new_menu_references["misc"].enable_kill_say) ~= "-" and client.userid_to_entindex(ent.attacker) == entity.get_local_player() and entity.get_prop(client.userid_to_entindex(ent.userid),"m_iTeamNum") ~= entity.get_prop(entity.get_local_player(),"m_iTeamNum") then
        
         client.exec("say " .. misc_functions.kill_say[ui.get(new_menu_references["misc"].enable_kill_say)][client.random_int(1, #misc_functions.kill_say[ui.get(new_menu_references["misc"].enable_kill_say)])])
     end
@@ -3088,10 +2827,6 @@ client.set_event_callback("aim_miss",function(ent)
         hit = false,
     }
 
-    if ui.get(new_menu_references["visuals"].draw_logs) then
-        print(string.format("Missed shot due to %s",reason))
-    end
-
 
     if table_contains(ui.get(new_menu_references["visuals"].extra_visuals),"beta logs") then
       
@@ -3136,10 +2871,6 @@ client.set_event_callback("aim_hit",function(ent)
         alpha = 255,
         state = true,
     }
-
-    if ui.get(new_menu_references["visuals"].draw_logs) then
-        print(string.format("Hit %s in the %s for %s damage (%s health remaining)",entity.get_player_name(ent.target),hitgroup_names[ent.hitgroup +  1],ent.damage,left_hp))
-    end
 
     if table_contains(ui.get(new_menu_references["visuals"].extra_visuals),"beta logs") then
         if visual_functions.predicted_damage > damage then
@@ -3332,8 +3063,6 @@ client.set_event_callback("paint",function()
             visual_functions.indicators()
         elseif ui.get(new_menu_references["visuals"].enable_indicators) == "minimal" then
             visual_functions.indicators2()
-        elseif ui.get(new_menu_references["visuals"].enable_indicators) == "yeat" then
-            visual_functions.indicators3()
         end
         
         visual_functions.zeus_indicator()
