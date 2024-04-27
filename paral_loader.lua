@@ -464,6 +464,8 @@ local glow_module = function(x, y, w, h, width, rounding, accent, accent_inner)
     end
 end
 
+print("→ Maybe fixed lua")
+
 local colorful_text = {
     lerp = function(self, from, to, duration)
         if type(from) == 'table' and type(to) == 'table' then
