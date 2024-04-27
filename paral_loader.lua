@@ -149,15 +149,19 @@ local new_menu_references = {
     aa_tab = ui.new_combobox(tab,place,"\aaac8fbffanti-aim\affffffff extras",{"Main","Jitter","Bruteforce"}),
    
     ["aa"] = {
+        
+        
         aa_state_menu = ui.new_combobox(tab,place,"\aaac8fbffanti-aim\affffffff state",{"Stand","Walk","In-Air","Air duck","Duck","Slow","Manual","Fakelag","Legit"}),
         freestanding_disabler = ui.new_multiselect(tab, place, "Freestanding [\aaac8fbffdisablers\affffffff]",{"Stand","Walk","In-Air","Air duck","Duck","Slow","Fakelag"}),
         aa_state = {},
         anti_kniv = ui.new_checkbox(tab, place, "anti-knife"),
         safe_dangerous = ui.new_checkbox(tab, place, "safe knife | taser"),
         label_jitter_ways = ui.new_label(tab,place,"Only works if you enable jitter ways"),
+        
     },
 
     ["visuals"] = {
+        
         enable_indicators = ui.new_combobox(tab,place,"> indicators",{"-","default","minimal"}),
         indicator_color = ui.new_color_picker(tab, place, "indicatorz", 255, 255, 255, 255),
         enable_manual = ui.new_combobox(tab, place, "> manual arrows",{"-","teamskeet","minimal"}),
@@ -188,6 +192,7 @@ local new_menu_references = {
     },
 
     ["misc"] = {
+        
         enable_clan_tag = ui.new_checkbox(tab, place, "synced tag"),
         console_filter = ui.new_checkbox(tab, place, "console filter"),
         enable_sun_rise = ui.new_checkbox(tab, place, "shadow modulation"),
@@ -196,7 +201,7 @@ local new_menu_references = {
         sun_distance = ui.new_slider(tab, place, "Distance\n", 50, 1500, 0),
         debug_ragebot = ui.new_multiselect(tab, place, "[\aaac8fbffdebug\affffffff] ragebot enhancer",{"defensive aa resolver (exprimental)","safe point enhancer"}),
         safe_point = ui.new_multiselect(tab, place, "safe point enhancer",{"Stand","on lethal","default","wide jitter"}),
-        enable_kill_say = ui.new_combobox(tab, place, "killsay",{"-","etheria"}),
+        enable_kill_say = ui.new_combobox(tab, place, "killsay",{"-","starlight"}),
         m_elements = ui.new_multiselect(tab, place, "animbreakes", {"body lean", "sliding", "pitch zero on land", "legbreaker in air", "legbreaker on land"}),
         slide_elements = ui.new_multiselect(tab, place, "sliding elements", {"walking", "running", "crouching"}),
         body_lean_value = ui.new_slider(tab, place, "body lean value", 0, 100, 0, true, "%", 0.01, {[0] = "off", [35] = "small", [50] = "medium", [75] = "high", [100] = "extreme"}),
@@ -927,17 +932,17 @@ local visual_functions = {
 }
 
 local misc_functions = {
-    kill_say = {["etheria"] = {"U think u good? luckily im here #etheria","youre value compared to me  is but a grain of sand","all romanian(you) will die to me(gypys king)",
-    "this isnt phasmaphobia: global offensive please dont speak","etheria trap house","I guarntee youre loss forever and always","𝕡𝕣𝕠𝕓𝕝𝕖𝕞?","cope",
-    " 格拉格拉 < you? 无功无过 < me B) #etheria","in hvh war i will win","below average performance etheria performance","SPEAK BULGARIAN? WILL TALK CN",
-    "you are loss it is decided with my etheria.lua","you do not perform this hvh against etheria","qahahaha i am top of this region","this weak snail is spoke of victory but is door unhinged to loss",
-    "you do not have the impression of owning the performance-enhancing software known as Gamesense.pub","how you will feel knowing im skeethaving and u will skeetless #etheria",
-    "your mexican familia never make it out from trailer #etheria","cant understand u. any noname translator? #etheria","you waste aka fecal matter/shit(you)","sorry for u loss, me always better like life",
-    "better luck next round, oh wait i alr won BAHAHHA","ur lua & u sucks get etheria >.<","when you spawn tell me why u die to me","how hit chance in deagle? i sit.",
-    "shitting on your cheat speedrun any% WR run feat etheria","smelly lapdog dreams of success in 1x1 but is handed 9 casualities","dude where are my diamonds?","all weak dogs fall to etheria","WOW etheria .。GYPSY 的科技 (TECHNOLOGY) ? "},
+    kill_say = {["Starlight"] = {"U think u good? luckily im here #STARLIGHT","youre value compared to me  is but a grain of sand","all romanian(you) will die to me(gypys king)",
+    "this isnt phasmaphobia: global offensive please dont speak","starlight trap house","I guarntee youre loss forever and always","𝕡𝕣𝕠𝕓𝕝𝕖𝕞?","cope",
+    " 格拉格拉 < you? 无功无过 < me B) #STARLIGHT","in hvh war i will win","below average performance starlight performance","SPEAK BULGARIAN? WILL TALK CN",
+    "you are loss it is decided with my starlight.lua","you do not perform this hvh against starlight","qahahaha i am top of this region","this weak snail is spoke of victory but is door unhinged to loss",
+    "you do not have the impression of owning the performance-enhancing software known as Gamesense.pub","how you will feel knowing im skeethaving and u will skeetless #starlight",
+    "your mexican familia never make it out from trailer #starlight","cant understand u. any noname translator? #STARLIGHT","you waste aka fecal matter/shit(you)","sorry for u loss, me always better like life",
+    "better luck next round, oh wait i alr won BAHAHHA","ur lua & u sucks get STARLIGHT >.<","when you spawn tell me why u die to me","how hit chance in deagle? i sit.",
+    "shitting on your cheat speedrun any% WR run feat starlight","smelly lapdog dreams of success in 1x1 but is handed 9 casualities","dude where are my diamonds?","all weak dogs fall to starlight","WOW STARLIGHT .。GYPSY 的科技 (TECHNOLOGY) ? "},
     ["Yeat"] = {"I got beef with my kidney, he said that we got a problem","first my money twerk, now its lifting weights money in the gym, now its heavyweight",
     "I just popped a X pill and half my body glitched", "Yeah, this percy got me snail, you should call me Gary","Mad bout that"}},
-    clan_tag = {"", "e","et","eth","ethe","ether","etheri","etheria","etheri","ether","ethe","eth","et","etheria","sta","st"},
+    clan_tag = {"", "st","sta","star","starl","starli","starlig","starligh","starlight","starligh","starlig","starli","starl","star","sta","st"},
     ct_tick = 0,
     ct_old_tick = 0,
     save_tick = 0,
@@ -1135,6 +1140,8 @@ local light_blue = "\aaac8fbff"
 local white = "\affffffff: "
 -- menu aa ui
 for k,v in ipairs(aa.aa_states) do
+    
+    
     brute_stage.brute[v] = {}
     local y = string.sub(v,1,1)
     local new_streng = string.gsub(v,y,string.upper(y))
@@ -1241,9 +1248,13 @@ local tick = 0
 local ticker = 0
 local lerp_alpha = 0
 function visual_functions:defensive_indicator()
+
     visual_functions.ticks = aa_functions.sim_diff()
     if ui.get(new_menu_references["visuals"].enable_defensive_indicator) then
+
         local w,h = client.screen_size()
+        
+    
         local defensive = {ui.get(new_menu_references["visuals"].indicator_defensive_color)}
         if visual_functions.ticks < 0 and ui.get(menu_reference.dt[1]) and ui.get(menu_reference.dt[2]) and not ui.get(menu_reference.fakeduck) then
             tick = globals.tickcount()
@@ -1253,7 +1264,9 @@ function visual_functions:defensive_indicator()
         end
     
         if visual_functions.defensive_ready == true then
+    
             local expand = visual_functions.is_defensive and 98 or ticker * 98 / 175
+    
             renderer.text(w / 2 , visual_functions.is_defensive and h / 2  * 0.5 - 20 or h / 2  * 0.5 - 10 ,255,255,255,lerp_alpha,"c",0,visual_functions.is_defensive and "defensive" or "- defensive -")
             if visual_functions.is_defensive then
                 renderer.text(w / 2 , h / 2  * 0.5 - 10 ,255,255,255,lerp_alpha,"c+",0,"∞")
@@ -1261,6 +1274,8 @@ function visual_functions:defensive_indicator()
             renderer.rectangle(w / 2 - 50, h / 2  * 0.5, 100, 4, 12, 12, 12,lerp_alpha <= 150 and lerp_alpha or 150)
             renderer.rectangle(w / 2 - 49, h / 2  * 0.5 + 1,expand,2,defensive[1],defensive[2],defensive[3],lerp_alpha)
     
+           
+
             if ticker > 155 then 
                 lerp_alpha = lerp(lerp_alpha,0,globals.frametime() * 30)
 
@@ -1274,11 +1289,17 @@ function visual_functions:defensive_indicator()
 end
 
 function visual_functions:slow_indicator()
+
     if not ui.get(new_menu_references["visuals"].slow_indicator) then return end
+
     local NOVINHA_QUEISSO = entity.get_prop(entity.get_local_player(),"m_flVelocityModifier") * 100
+
     if NOVINHA_QUEISSO < 100 then
+
         local sizer = vector(client.screen_size())
+    
         local size_bar = NOVINHA_QUEISSO * 98 / 100
+
         local defensive = {ui.get(new_menu_references["visuals"].indicator_slow_color)}
         
         renderer.text(sizer.x /2,sizer.y/2- 240,230,230,230,255,"c",nil,string.format("slowed by %s",math.floor(100 - NOVINHA_QUEISSO)) .. "%")
@@ -1290,6 +1311,7 @@ end
 
 function aa_functions:manual_anti_aim()
     if ui.get(new_menu_references["aa"].aa_state["Manual"].enabled) then
+        
         ui.set(new_menu_references["aa"].aa_state["Manual"].yaw,"180")
         if ui.get(new_menu_references["keys"].manual_right) and aa.last_pressed + 0.2 < globals.curtime() then
             aa.manual_state = aa.manual_state == "right" and "reset" or "right"
@@ -1347,8 +1369,12 @@ function aa_functions.anti_brute_bullet_impact(event)
 	local ex, ey, ez = entity.get_prop(shooter, "m_vecOrigin")
 
 	local dist = ((event.y - ey)*lx - (event.x - ex)*ly + event.x*ey - event.y*ex) / math.sqrt((event.y-ey)^2 + (event.x - ex)^2)
+    
+	
 	if math.abs(dist) <= 35 and globals.curtime() - brute_stage.last_miss > 0.015 then
         brute_stage.last_miss = globals.curtime()
+
+        
         brute_stage.brute[aa_functions.aa_number].missed_bullets = brute_stage.brute[aa_functions.aa_number].missed_bullets + 1
 
         if  brute_stage.brute[aa_functions.aa_number].missed_bullets >= 5 then 
@@ -1549,7 +1575,7 @@ function aa_functions:defensive_setup(cmd)
     old_def_state = aa_functions.aa_number
 
     if aa_functions.can_defensive  then
-        aa_functions.def_ticks = 29
+        aa_functions.def_ticks = 24
         aa_functions.can_defensive = false
     end
 
@@ -1869,7 +1895,7 @@ function visual_functions:indicators2()
     text_index,text_string = text_plus(text_index,aa_functions.aa_number,50)
     
 
-    renderer.text(w / 2 + math.ceil(text_anim[1]),h / 2 + 24,indicator_color[1],indicator_color[2],indicator_color[3],indicator_color[4],"c",0,"etheria")
+    renderer.text(w / 2 + math.ceil(text_anim[1]),h / 2 + 24,indicator_color[1],indicator_color[2],indicator_color[3],indicator_color[4],"c",0,"starlight")
     renderer.text(w / 2 + math.ceil(text_anim[2]),h / 2 + 36,255,255,255,255,"c",0,"- " .. text_string .. " -")
    
     if ui.get(menu_reference.dt[1]) and ui.get(menu_reference.dt[2]) then 
@@ -1894,7 +1920,7 @@ function visual_functions:indicators2()
     renderer.text(w / 2 - 18 + math.ceil(text_anim[5]),h / 2 + 48 + math.ceil(addition),255,255,255,ui.get(menu_reference.forcebaim) and 255 or 130,"c",0,"baim")
     renderer.text(w / 2 + 18 +  math.ceil(text_anim[5]),h / 2 + 48 + math.ceil(addition),255,255,255,ui.get(menu_reference.quickpeek[2]) and ui.get(menu_reference.quickpeek[1]) and 255 or 130,"c",0,"quick")
 
-    local text = {"etheria","- " .. text_string .. " -","double tap","on shot","baim"}
+    local text = {"starlight","- " .. text_string .. " -","double tap","on shot","baim"}
     for i = 1,#text do
         local measure = vector(renderer.measure_text("c", text[i]))
         --local can2 = scoped_and_box
@@ -2224,7 +2250,7 @@ function visual_functions:watermark()
     local wm = { ui.get(new_menu_references["visuals"].watermark_color) }
     
     if ui.get(new_menu_references["visuals"].watermark_label) == true then
-        text_fade_animation(w - 50,h / 2,5,{r=255,g=255,b=255,a=255},{r=wm[1],g=wm[2],b=wm[3],a=wm[4]},"etheria")
+        text_fade_animation(w - 50,h / 2,5,{r=255,g=255,b=255,a=255},{r=wm[1],g=wm[2],b=wm[3],a=wm[4]},"starlight")
     end
 end
 
@@ -2913,7 +2939,7 @@ function visual_functions:whatsapp_notifications()
         rounded_rectangle(w / 2 - measure[1]/2 - 10,math.ceil(aim_logs[i].pos_animation) - 40 + not_x, measure[1] + 50,40,0,0,0,255,6,15)
         renderer.rectangle(w / 2 - measure[1]/2,math.ceil(aim_logs[i].pos_animation) - 40 + not_x, measure[1] + 30,40,0,0,0,255)
 
-        renderer.text(w/ 2 - measure[1]/2 + 30,math.ceil(aim_logs[i].pos_animation) - 32 + not_x,220,220,220,255,"",nil, aim_logs[i].state == true and "etheria ~ \a96C83CFFHit\aFFFFFFFF" or "etheria ~ \aFF0032FFMiss\aFFFFFFFF")
+        renderer.text(w/ 2 - measure[1]/2 + 30,math.ceil(aim_logs[i].pos_animation) - 32 + not_x,220,220,220,255,"",nil, aim_logs[i].state == true and "Starlight ~ \a96C83CFFHit\aFFFFFFFF" or "Starlight ~ \aFF0032FFMiss\aFFFFFFFF")
         
 
         renderer.text(w/ 2 - measure[1]/2 + 30,math.ceil(aim_logs[i].pos_animation) - 20 + not_x,220,220,220,255,"",nil, actual_string)
@@ -2973,10 +2999,10 @@ end)
 
 local intro = {}
 
-function visual_functions:welcome_to_etheria()
+function visual_functions:welcome_to_starlight()
    local w,h = client.screen_size()
     intro[#intro + 1] ={
-        message = "Welcome to etheria, ",
+        message = "Welcome to starlight, ",
         username = obex_data.username .. '.',
         alpha = 240,
         timer = 600,
@@ -2985,7 +3011,7 @@ function visual_functions:welcome_to_etheria()
     }
 end
 
-visual_functions.welcome_to_etheria()
+visual_functions.welcome_to_starlight()
 
 function visual_functions:start_intro()
 
@@ -3023,8 +3049,7 @@ client.set_event_callback("paint",function()
     --visual_functions.offset = lerp(visual_functions.offset,scoped_and_box and 30 or 0,globals.frametime() * 15)
 
     --aa_functions.can_defensive = false
-    --and ui.get(new_menu_references["aa"].aa_state[aa_functions.aa_number].enabled_exploit
-    if visual_functions.ticks <= -1 and aa_functions.to_start == false) then
+    if visual_functions.ticks <= -1 and aa_functions.to_start == false and ui.get(new_menu_references["aa"].aa_state[aa_functions.aa_number].enabled_exploit) then
         aa_functions.can_defensive = true
     end
     
@@ -3157,7 +3182,8 @@ end
 
 local debug_resolver = false
 function aa_functions:resolver()
-    if table_contains(ui.get(new_menu_references["misc"].debug_ragebot), "defensive aa resolver (exprimental)") then
+
+    if table_contains(ui.get(new_menu_references["misc"].debug_ragebot),"defensive aa resolver (exprimental)") then
         debug_resolver = true
         for k,ent in ipairs(entity.get_players(true)) do
             local ent_jumping = bit.band(entity.get_prop(ent, "m_fFlags"), 1) 
@@ -3167,23 +3193,23 @@ function aa_functions:resolver()
     
             if ent_jumping == 0 then
                 if y < -1 then
-                    plist.set(ent,"Force pitch", true)
-                    plist.set(ent,"Force pitch value", 0)
-                    plist.set(ent,"Force body yaw", true)
-                    plist.set(ent,"Force body yaw value", 0)
+                    plist.set(ent,"Force pitch",true)
+                    plist.set(ent,"Force pitch value",0)
+                    plist.set(ent,"Force body yaw",true)
+                    plist.set(ent,"Force body yaw value",0)
                 else
-                    plist.set(ent,"Force pitch", false)
-                    plist.set(ent,"Force body yaw", false)
+                    plist.set(ent,"Force pitch",false)
+                    plist.set(ent,"Force body yaw",false)
                 end
             else
-                plist.set(ent,"Force pitch", false)
-                plist.set(ent,"Force body yaw", false)
+                plist.set(ent,"Force pitch",false)
+                plist.set(ent,"Force body yaw",false)
             end
         end
-    elseif not table_contains(ui.get(new_menu_references["misc"].debug_ragebot), "defensive aa resolver (exprimental)") and debug_resolver == true then
+    elseif not table_contains(ui.get(new_menu_references["misc"].debug_ragebot),"defensive aa resolver (exprimental)") and debug_resolver == true then
         for k,ent in ipairs(entity.get_players(true)) do
-            plist.set(ent,"Force pitch", false)
-            plist.set(ent,"Force body yaw", false)
+            plist.set(ent,"Force pitch",false)
+            plist.set(ent,"Force body yaw",false)
         end
         debug_resolver = false
     end
@@ -3209,9 +3235,7 @@ client.set_event_callback("paint_ui", function()
     if ui.get(new_menu_references["aa"].aa_state_menu) == "Legit" and (ui.get(new_menu_references["aa"].aa_state["Legit"].yaw) == "jittery" or ui.get(new_menu_references["aa"].aa_state["Legit"].yaw) == "delayed")then
         ui.set(new_menu_references["aa"].aa_state[9].yaw,"180")
     end
-    
-    --visual_functions.negros()
-    --visual_functions.NIGGASSSSSS()
+
     if atimer < 71 then
         atimer = atimer + 1
     end
