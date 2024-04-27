@@ -190,7 +190,6 @@ local new_menu_references = {
     ["misc"] = {
         enable_clan_tag = ui.new_checkbox(tab, place, "synced tag"),
         console_filter = ui.new_checkbox(tab, place, "console filter"),
-        defensive_ticks = ui.new_slider(tab, place, "defensive ticks", 0, 100, 27, true, "px", 1),
         enable_sun_rise = ui.new_checkbox(tab, place, "shadow modulation"),
         sun_pitch = ui.new_slider(tab, place, "Pitch\n", -89, 89, 0),
         sun_yaw = ui.new_slider(tab, place, "Yaw\n", 0, 180, 0),
@@ -938,7 +937,7 @@ local misc_functions = {
     "shitting on your cheat speedrun any% WR run feat etheria","smelly lapdog dreams of success in 1x1 but is handed 9 casualities","dude where are my diamonds?","all weak dogs fall to etheria","WOW etheria .。GYPSY 的科技 (TECHNOLOGY) ? "},
     ["Yeat"] = {"I got beef with my kidney, he said that we got a problem","first my money twerk, now its lifting weights money in the gym, now its heavyweight",
     "I just popped a X pill and half my body glitched", "Yeah, this percy got me snail, you should call me Gary","Mad bout that"}},
-    clan_tag = {"", "e","et","eth","ethe","ether","etheri","etheria","etheri","ether","ethe","eth","et","e",""},
+    clan_tag = {"", "e","et","eth","ethe","ether","etheri","etheria","etheri","ether","ethe","eth","et","etheria","sta","st"},
     ct_tick = 0,
     ct_old_tick = 0,
     save_tick = 0,
@@ -1550,7 +1549,7 @@ function aa_functions:defensive_setup(cmd)
     old_def_state = aa_functions.aa_number
 
     if aa_functions.can_defensive  then
-        aa_functions.def_ticks = ui.get(new_menu_references["misc"].defensive_ticks)
+        aa_functions.def_ticks = 29
         aa_functions.can_defensive = false
     end
 
@@ -2657,7 +2656,6 @@ local function new_menu_visibility()
     --ui.set_visible(new_menu_references["misc"].misc_label,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].enable_kill_say,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].enable_clan_tag,ui_menu.selected_tab == 4)
-    ui.set_visible(new_menu_references["misc"].defensive_ticks, ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].enable_sun_rise,ui_menu.selected_tab == 4)
     ui.set_visible(new_menu_references["misc"].console_filter, ui_menu.selected_tab == 4)
 
