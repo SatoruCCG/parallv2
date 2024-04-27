@@ -1575,7 +1575,7 @@ function aa_functions:defensive_setup(cmd)
     old_def_state = aa_functions.aa_number
 
     if aa_functions.can_defensive  then
-        aa_functions.def_ticks = 24
+        aa_functions.def_ticks = 27
         aa_functions.can_defensive = false
     end
 
